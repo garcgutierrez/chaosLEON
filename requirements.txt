@@ -1,0 +1,5 @@
+numpy>=1.24
+numba>=0.60
+scipy>=1.10
+matplotlib>=3.7
+# optional: tbb (Numba threading layer used for the timings), cupy (GPU test, compute_gpu.py)

@@ -1,0 +1,38 @@
+cff-version: 1.2.0
+message: "If you use this code, please cite the paper and the archived data/code."
+title: "Chaos as a breakdown of Gaussian uncertainty propagation: code"
+type: software
+license: MIT
+version: "1.0.0"
+date-released: "2026-09-26"
+repository-code: "https://github.com/<user>/gaussian-breakdown-chaos"
+authors:
+  - family-names: "García-Gutiérrez"
+    given-names: "Adrián"
+    affiliation: "Aerospace Engineering Department, I4 Institute, Universidad de León"
+    email: "agarcg@unileon.es"
+  - family-names: "Rubio"
+    given-names: "Carlos"
+    affiliation: "Aerospace Engineering Department, I4 Institute, Universidad de León"
+  - family-names: "Domínguez"
+    given-names: "Diego"
+    affiliation: "Aerospace Engineering Department, I4 Institute, Universidad de León"
+  - family-names: "López"
+    given-names: "Deibi"
+    affiliation: "Aerospace Engineering Department, I4 Institute, Universidad de León"
+keywords: [chaos indicators, SALI, OFLI2, uncertainty quantification, polynomial chaos, Hamiltonian systems, GPU]
+preferred-citation:
+  type: article
+  title: "Chaos as a breakdown of Gaussian uncertainty propagation: from covariance aspect ratios to kernel-folding and grid-as-ensemble indicators"
+  authors:
+    - family-names: "García-Gutiérrez"
+      given-names: "Adrián"
+    - family-names: "Rubio"
+      given-names: "Carlos"
+    - family-names: "Domínguez"
+      given-names: "Diego"
+    - family-names: "López"
+      given-names: "Deibi"
+  journal: "Chaos"
+  year: 2026
+  notes: "Submitted"

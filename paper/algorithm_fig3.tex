@@ -1,0 +1,88 @@
+% TikZ schematic of the grid-as-ensemble algorithm (input by main.tex, Fig. \ref{fig:algorithm}).
+% (a) the nine-point stencil of a node at t = 0 and its image at time t, with the local quartic surrogate;
+% (b) the block-synchronous loop used for the chaos maps and for the speed-up study of Sec. VI G.
+\begin{tikzpicture}[font=\footnotesize, >={Stealth[length=4pt]},
+  node1/.style={circle, fill=blue!70!black, inner sep=1.3pt},
+  node2/.style={circle, draw=blue!70!black, fill=white, line width=0.6pt, inner sep=1.2pt},
+  node0/.style={circle, fill=black, inner sep=1.6pt},
+  box/.style={draw=black!60, rounded corners=2pt, align=center, text width=5.2cm, inner sep=3pt, line width=0.5pt},
+  note/.style={align=center, text width=2.0cm, font=\scriptsize\itshape, text=black!70}]
+
+% ---------------------------------------------------------------- panel (a)
+\def\s{0.42}
+\node[font=\small] at (-1.55, 2.35) {(a)};
+% kernel of width h
+\shade[inner color=orange!45, outer color=orange!0] (0,0) circle (1.25*\s);
+\draw[orange!80!black, dashed, line width=0.5pt] (0,0) circle (\s);
+% grid
+\foreach \i in {-3,...,3} {
+  \draw[black!15, line width=0.3pt] (\i*\s, -3*\s) -- (\i*\s, 3*\s);
+  \draw[black!15, line width=0.3pt] (-3*\s, \i*\s) -- (3*\s, \i*\s);
+  \foreach \j in {-3,...,3} { \fill[black!30] (\i*\s, \j*\s) circle (0.6pt); }
+}
+% stencil
+\foreach \k in {-1,1} { \node[node1] at (\k*\s, 0) {}; \node[node1] at (0, \k*\s) {}; }
+\foreach \k in {-2,2} { \node[node2] at (\k*\s, 0) {}; \node[node2] at (0, \k*\s) {}; }
+\node[node0] at (0,0) {};
+\node[anchor=south east, inner sep=1pt] at (-0.03, 0.02) {$\bx_{ij}$};
+\draw[|<->|, line width=0.4pt] (0, -3.55*\s) -- node[below=-1pt] {$h_1$} (\s, -3.55*\s);
+\draw[|<->|, line width=0.4pt] (-3.55*\s, 0) -- node[left=-1pt] {$h_2$} (-3.55*\s, \s);
+\node[align=center] at (0, 1.75) {$t=0$: kernel of width $h$\\and nine-point stencil};
+
+% flow
+\draw[->, line width=0.8pt] (1.55, 0.1) -- node[above] {$\phi_t$} node[below, align=center, font=\scriptsize] {one orbit\\per node} (2.85, 0.1);
+
+% image at time t (schematic quartic surrogate)
+\def\cx{4.85}
+\fill[orange!30, draw=orange!80!black, line width=0.5pt, dashed]
+  plot[domain=0:360, samples=90, smooth cycle, variable=\t]
+  ({\cx + 0.60*cos(\t) - 0.02*cos(\t)*cos(\t) - 0.20*sin(\t) + 0.04*sin(\t)*sin(\t)},
+   {0.08*cos(\t) + 0.14*cos(\t)*cos(\t) + 0.012*cos(\t)*cos(\t)*cos(\t) + 0.12*sin(\t)});
+% tangent line (linear, Gaussian part) and bending offset at xi = 2
+\draw[black!55, dashed, line width=0.5pt] (\cx - 1.45, -0.19) -- (\cx + 1.45, 0.19);
+\draw[red!75!black, line width=0.9pt]
+  plot[domain=-2.35:2.35, samples=50, smooth, variable=\t]
+  ({\cx + 0.60*\t - 0.02*\t*\t}, {0.08*\t + 0.14*\t*\t + 0.012*\t*\t*\t});
+\draw[blue!60!black, line width=0.6pt]
+  plot[domain=-2.3:2.3, samples=30, smooth, variable=\t]
+  ({\cx - 0.20*\t + 0.04*\t*\t}, {0.12*\t});
+\foreach \k in {-1,1} {
+  \node[node1] at ({\cx + 0.60*\k - 0.02*\k*\k}, {0.08*\k + 0.14*\k*\k + 0.012*\k*\k*\k}) {};
+  \node[node1] at ({\cx - 0.20*\k + 0.04*\k*\k}, {0.12*\k}) {}; }
+\foreach \k in {-2,2} {
+  \node[node2] at ({\cx + 0.60*\k - 0.02*\k*\k}, {0.08*\k + 0.14*\k*\k + 0.012*\k*\k*\k}) {};
+  \node[node2] at ({\cx - 0.20*\k + 0.04*\k*\k}, {0.12*\k}) {}; }
+\draw[->, red!75!black, line width=0.7pt] ({\cx + 1.12}, 0.15) -- ({\cx + 1.12}, 0.80);
+\node[red!75!black, anchor=west, inner sep=1pt] at ({\cx + 1.14}, 0.42) {$\bm c_{k,d}^{\perp}$};
+\node[node0] at (\cx, 0) {};
+\draw[->, line width=0.8pt] (\cx, 0) -- (\cx + 0.60, 0.08);
+\node[anchor=north west, inner sep=1pt] at (\cx + 0.95, 0.10) {$\bm c_{1,d}$};
+\node[anchor=north east, inner sep=1pt] at (\cx - 0.12, -0.02) {$\bx_{ij}(t)$};
+\node[align=center] at (\cx, 1.75) {time $t$: quartic surrogate\\$\bx(t,\xi)\approx\sum_{k=0}^{4}\bm c_{k,d}(t)\,\xi^{k}$};
+
+% legend of panel (a)
+\node[anchor=north west, inner sep=0pt] at (-1.6, -1.95) {\parbox{8.3cm}{\raggedright
+  $\bm c_{1,d}$ (dashed line): linear, Gaussian deformation of the kernel; its aspect ratio is SALI (Sec.~\ref{sec:equivalence}).\\[1pt]
+  \textcolor{red!75!black}{$\bm c_{k,d}^{\perp}$}, $k=2,3,4$: bending of the kernel, measured by $\mathcal B_h$, $\mathrm{OFLI2}_h$ and $\LEON_h$ (Sec.~\ref{sec:metrics}).}};
+
+% ---------------------------------------------------------------- panel (b)
+\begin{scope}[xshift=11.75cm]
+\node[font=\small] at (-4.55, 2.35) {(b)};
+\node[box] (b0) at (0, 2.05) {Initial grid $\{\bx_{ij}(0)\}$ on the section,\\admissible nodes, neighbour table};
+\node[box, fill=blue!7, below=0.32cm of b0] (b1) {\textbf{Advance} every node over one block:\\$\bx_{ij}\leftarrow\phi_{\tau}(\bx_{ij})$};
+\node[box, fill=orange!10, below=0.5cm of b1] (b2) {\textbf{Read-out} at every node, $d=1,2$:\\$\bm c_{k,d}$ from the stencil, projection $\Pp$,\\running sup of $\mathcal S_h$, $\mathcal B_h$, $\mathrm{OFLI2}_h$, $\LEON_h$};
+\node[box, text width=1.2cm, below=0.32cm of b2] (b3) {$t<T$\,?};
+\node[box, fill=black!5, below=0.32cm of b3] (b4) {chaos maps at time $T$};
+\draw[->] (b0) -- (b1);
+\draw[->] (b1) -- (b2);
+\coordinate (bar) at ($(b1.south)!0.5!(b2.north)$);
+\draw[black!60, dashed, line width=0.4pt] ($(bar)+(-2.8,0)$) -- ($(bar)+(2.8,0)$);
+\node[anchor=west, font=\scriptsize, fill=white, inner sep=1pt] at ($(bar)+(0.12,0)$) {barrier};
+\draw[->] (b2) -- (b3);
+\draw[->] (b3) -- node[right, font=\scriptsize] {no} (b4);
+\draw[->] (b3.east) -- node[above, font=\scriptsize] {yes, $t\leftarrow t+\tau$} (2.95, 0 |- b3.east) -- (2.95, 0 |- b1.east) -- (b1.east);
+\node[note, left=0.1cm of b1] {parallel,\\independent orbits,\\any integrator};
+\node[note, left=0.1cm of b2] {parallel,\\reads the neighbours\\at $\pm h_d$, $\pm2h_d$};
+\node[below=0.08cm of b4, inner sep=0pt, font=\scriptsize\itshape, text=black!70] {\parbox{5.6cm}{\centering tangent indicators (SALI, OFLI2, $\mathcal B$, LEON): the same loop per node, with variational equations instead of the read-out}};
+\end{scope}
+\end{tikzpicture}

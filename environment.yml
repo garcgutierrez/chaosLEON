@@ -1,0 +1,10 @@
+name: gaussian-breakdown-chaos
+channels: [conda-forge]
+dependencies:
+  - python>=3.10
+  - numpy>=1.24
+  - numba>=0.60
+  - scipy>=1.10
+  - matplotlib>=3.7
+  - tbb
+  # - cupy            # only for paper/compute_gpu.py (NVIDIA GPU)
